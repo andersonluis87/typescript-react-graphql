@@ -13,7 +13,11 @@ Link of the video: https://www.youtube.com/watch?v=I6ypD7qv3Z8
 - TypeORM
 - Apollo Server Express
 - GraphQL
+- Argon2
 - React
+- Postgres
+- Redis
+
 
 
 # Mikro ORM
@@ -24,3 +28,10 @@ Official Documentation: https://mikro-orm.io/docs
 ```bash
 npx mikro-orm migration:create
 ```
+
+or 
+
+```bash
+create:migration
+```
+*As configured on* `packages.json`.
