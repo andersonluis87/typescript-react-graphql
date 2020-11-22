@@ -9,11 +9,14 @@ export default {
     migrations: {
         path: path.join(__dirname, './migrations'),
         pattern: /^[\w-]+\d+\.[tj]s$/,
+        disableForeignKeys: false
     },
     entities: [Post, User],
-    dbName: 'lireddit',
-    user: 'postgres',
-    password: 'postgres',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dbName: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     type: 'postgresql',
     debug: !__prod__
 } as Parameters<typeof MikroORM.init>[0];

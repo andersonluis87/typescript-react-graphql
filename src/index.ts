@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'dotenv/config';
 import { __prod__ } from "./constants";
 import express from 'express';
 
@@ -15,14 +16,12 @@ import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 
-
 const main = async() => {
     const orm = await MikroORM.init(microConfig);
     orm.getMigrator().up();
 
     const app = express();
     app.use(express.json());
-
 
     const RedisStore = connectRedis(session);
     const redisClient = redis.createClient();
@@ -41,7 +40,7 @@ const main = async() => {
                 secure: __prod__ // cookie only works in https 
             },
             saveUninitialized: false,
-            secret: "ThiSisMyS3cr3T!#",
+            secret: process.env.COOKIE_SECRET || '',
             resave: false,
         })
     );
@@ -64,10 +63,10 @@ const main = async() => {
         res.json({ message: 'Hello' });
     });
 
-    app.listen(4000, () => {
-        console.log('🚀 Server is running on port 4000...')
-    });
-    
+    const port = process.env.PORT || 4000;
+    app.listen(port, () => {
+        console.log(`🚀 Server is running on port ${port}...`)
+    });    
 }
 
 main().catch((err) => {
