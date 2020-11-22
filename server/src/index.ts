@@ -15,13 +15,22 @@ import { UserResolver } from './resolvers/user';
 import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
+import cors from 'cors';
 
 const main = async() => {
     const orm = await MikroORM.init(microConfig);
     orm.getMigrator().up();
 
+    
     const app = express();
     app.use(express.json());
+
+    app.use(
+        cors({
+            origin: 'http://localhost:3000',
+            credentials: true
+        })
+    );
 
     const RedisStore = connectRedis(session);
     const redisClient = redis.createClient();
@@ -57,7 +66,10 @@ const main = async() => {
         context: ({ req, res }) => ({ em: orm.em, req, res })
     });
 
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({ 
+        app,
+        cors: false
+    });
     
     app.get('/', (_, res) => {
         res.json({ message: 'Hello' });
